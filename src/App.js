@@ -25,34 +25,67 @@ function App() {
     },
   ];
 
+  const [state, setState] = React.useState({
+    fName: '',
+    lName: '',
+  });
+
+  function handleChange(evt) {
+    const value = evt.target.value;
+    setState({
+      ...state,
+      [evt.target.name]: value,
+    });
+
+    console.log(value);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Enter your data here:</h1>
       </header>
+
       {/* Personalia */}
       <form>
         <p>Personalia:</p>
-        <label for="fname">First name:</label>
-        <input type="text" id="fname" name="fname" />
+        <label>
+          First name:
+          <input
+            type="text"
+            name="firstName"
+            value={state.fName}
+            onChange={handleChange}
+          />
+        </label>
         <br />
         <br />
-        <label for="lname">Last name:</label>
-        <input type="text" id="lname" name="lname" />
+        <label>
+          Last name:
+          <input
+            type="text"
+            name="lastName"
+            value={state.lName}
+            onChange={handleChange}
+          />
+        </label>
         <br />
         <br />
-        <input type="submit" value="Submit" />
 
         {/* Attendance */}
 
         <p>Attendance:</p>
 
-        <input type="radio" id="yes" name="yes" value="yes" />
+        <input type="radio" value="yes" />
         <label for="yes"> Yes</label>
         <input type="radio" id="no" name="no" value="no" />
         <label for="no"> No</label>
         <input type="radio" id="pending" name="pending" value="pending" />
         <label for="pending"> Pending</label>
+        <br />
+        <p>
+          <button>Submit</button>
+        </p>
       </form>
 
       {/* Tabelle */}
@@ -67,10 +100,10 @@ function App() {
         {guest.map((guest) => (
           <tr key={guest.id}>
             <td>
-              <input type="checkbox" id="checkbox" name="checkbox" />
+              <input type="checkbox" checked={null} />
             </td>
             <td>{guest.fname}</td>
-            <td>{guest.fname}</td>
+            <td>{guest.lname}</td>
             <td>{guest.attendance}</td>
           </tr>
         ))}
@@ -78,9 +111,11 @@ function App() {
 
       {/* Delete-Button */}
       <p>
-        <button type="button" id="delete">
-          Delete
-        </button>
+        <label>
+          <button type="button" id="delete">
+            Delete
+          </button>
+        </label>
       </p>
     </div>
   );

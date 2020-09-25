@@ -2,43 +2,56 @@ import React from 'react';
 import './App.css';
 
 function App() {
-  const guest = [
+  // hardcoded array of guests
+  const guestList = [
     {
-      id: 1,
       fname: 'Veronika',
       lname: 'Maier',
       attendance: 'yes',
     },
-
     {
-      id: 2,
       fname: 'Thomas',
       lname: 'Porter',
       attendance: 'no',
     },
-
     {
-      id: 3,
       fname: 'Alexandra',
       lname: 'Huber',
       attendance: 'pending',
     },
   ];
 
-  const [state, setState] = React.useState({
-    fName: '',
-    lName: '',
-  });
+  // Test push to array - works
+  // const newguest = guest.push({
+  //   fname: 'Marion',
+  //   lname: 'Dortschak',
+  //   attendance: 'no',
+  // });
 
-  function handleChange(evt) {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value,
-    });
+  //set state for guest array
+  const [list, setList] = React.useState(guestList);
 
-    console.log(value);
-  }
+  // set state for input fields
+  const [fname, setfName] = React.useState('');
+  const [lname, setlName] = React.useState('');
+
+  // set stae for radio button
+  const [attendance, setAttendance] = React.useState('');
+
+  //When button is clicked:
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    //creating new array newList by adding incoming values to array "list" (=inital state)
+    const newList = list.concat({ fname, lname, attendance });
+
+    // adds an incrementing id to each object
+    const createID = list.forEach((o, i) => (o.id = i + 1));
+
+    setList(newList);
+
+    console.log(newList);
+  };
 
   return (
     <div className="App">
@@ -47,41 +60,55 @@ function App() {
       </header>
 
       {/* Personalia */}
-      <form>
+      <form onSubmit={handleSubmit}>
         <p>Personalia:</p>
-        <label>
-          First name:
-          <input
-            type="text"
-            name="firstName"
-            value={state.fName}
-            onChange={handleChange}
-          />
-        </label>
+        <label>First name:</label>
+        <input
+          type="text"
+          id="firstName"
+          onChange={(e) => setfName(e.target.value)}
+        />
+
         <br />
         <br />
-        <label>
-          Last name:
-          <input
-            type="text"
-            name="lastName"
-            value={state.lName}
-            onChange={handleChange}
-          />
-        </label>
+        <label>Last name:</label>
+        <input
+          type="text"
+          id="lastName"
+          onChange={(e) => setlName(e.target.value)}
+        />
+
         <br />
         <br />
 
         {/* Attendance */}
-
         <p>Attendance:</p>
 
-        <input type="radio" value="yes" />
-        <label for="yes"> Yes</label>
-        <input type="radio" id="no" name="no" value="no" />
-        <label for="no"> No</label>
-        <input type="radio" id="pending" name="pending" value="pending" />
-        <label for="pending"> Pending</label>
+        <input
+          type="radio"
+          name="attendance"
+          value="yes"
+          onChange={(e) => setAttendance(e.target.value)}
+        />
+        <label>Yes</label>
+
+        <input
+          type="radio"
+          id="no"
+          name="attendance"
+          value="no"
+          onChange={(e) => setAttendance(e.target.value)}
+        />
+        <label>No</label>
+
+        <input
+          type="radio"
+          id="pending"
+          name="attendance"
+          value="pending"
+          onChange={(e) => setAttendance(e.target.value)}
+        />
+        <label> Pending</label>
         <br />
         <p>
           <button>Submit</button>
@@ -90,25 +117,24 @@ function App() {
 
       {/* Tabelle */}
       <h1> Guest list:</h1>
-
       <table>
         <tr>
+          <th></th>
           <th>Firstname</th>
           <th>Lastname</th>
           <th>Attendance</th>
         </tr>
-        {guest.map((guest) => (
-          <tr key={guest.id}>
+        {list.map((item) => (
+          <tr key={item.id}>
             <td>
               <input type="checkbox" checked={null} />
             </td>
-            <td>{guest.fname}</td>
-            <td>{guest.lname}</td>
-            <td>{guest.attendance}</td>
+            <td>{item.fname}</td>
+            <td>{item.lname}</td>
+            <td>{item.attendance}</td>
           </tr>
         ))}
       </table>
-
       {/* Delete-Button */}
       <p>
         <label>
